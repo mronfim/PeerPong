@@ -89,6 +89,11 @@ void drawRect(Window* window, int x, int y, int w, int h, SDL_Color c)
     SDL_RenderDrawRect(window->renderer, &rect);
 }
 
+void drawSDLRect(Window* window, SDL_Rect r, SDL_Color c)
+{
+    drawRect(window, r.x, r.y, r.w, r.h, c);
+}
+
 void fillRect(Window* window, int x, int y, int w, int h, SDL_Color c)
 {
     SDL_Rect rect;
@@ -99,6 +104,11 @@ void fillRect(Window* window, int x, int y, int w, int h, SDL_Color c)
     
     SDL_SetRenderDrawColor(window->renderer, c.r, c.g, c.b, c.a);
     SDL_RenderFillRect(window->renderer, &rect);
+}
+
+void fillSDLRect(Window* window, SDL_Rect r, SDL_Color c)
+{
+    fillRect(window, r.x, r.y, r.w, r.h, c);
 }
 
 void writeToScreen(Window* window, char* text, int x, int y, int size, Font* font, SDL_Color c)

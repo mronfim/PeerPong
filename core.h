@@ -47,7 +47,9 @@ void freeWindow(Window** windowAddr);
 
 SDL_Color getColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 void drawRect(Window* window, int x, int y, int w, int h, SDL_Color c);
+void drawSDLRect(Window* window, SDL_Rect r, SDL_Color c);
 void fillRect(Window* window, int x, int y, int w, int h, SDL_Color c);
+void fillSDLRect(Window* window, SDL_Rect r, SDL_Color c);
 void writeToScreen(Window* window, char* text, int x, int y, int size, Font* font, SDL_Color c);
 void clearScreen(Window* window, SDL_Color);
 void drawTexture(Window* window, Texture* t, int x, int y);
