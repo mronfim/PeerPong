@@ -20,8 +20,9 @@ int main(int argc, const char * argv[])
         int quit = 0;
         SDL_Event e;
         
-        Font font = {"DISMIS", "PeerPong/res/fonts/DIMIS___.TTF"};
-        Texture* ball = loadTexture(window, "PeerPong/res/img/ball.png");
+        Font dimis = {"DISMIS", "PeerPong/res/fonts/DIMIS___.TTF"};
+        Font arcadepi = {"ARCADEPI", "PeerPong/res/fonts/ARCADEPI.TTF"};
+        Texture* ball = loadTexture(window, "PeerPong/res/img/ball_15.png");
         
         while (!quit)
         {
@@ -32,7 +33,8 @@ int main(int argc, const char * argv[])
             }
             
             clearScreen(window, getColor(0, 0, 0, 255));
-            writeToScreen(window, "PeerPong", 100, 50, 50, &font, getColor(255, 255, 255, 255));
+            fillRect(window, 30, 100, 20, 100, getColor(0, 0, 155, 255));
+            drawRect(window, 30, 100, 20, 100, getColor(0, 0, 255, 255));
             drawTexture(window, ball, 300, 300);
             SDL_RenderPresent(window->renderer);
         }
