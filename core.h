@@ -1,14 +1,14 @@
 //
-//  main.c
+//  core.h
 //  PeerPong
 //
 //  Created by Matheus Barella Ronfim on 4/10/16.
 //  Copyright © 2016 Matheus Barella Ronfim. All rights reserved.
 //
 
-#include <stdio.h>
-#include <SDL2/SDL.h>
+#ifndef core_h
+#define core_h
 
-int main(int argc, const char * argv[]) {
-    return 0;
-}
+#include <stdio.h>
+
+#endif /* core_h */
