@@ -22,8 +22,8 @@ const int SCREEN_TICKS_PER_FRAME = 1000.0 / SCREEN_FPS;
 
 // VARIABLES
 Window* window = NULL;
-Font dimis = {"DISMIS", "PeerPong/res/fonts/DIMIS___.TTF"};
-Font arcadepi = {"ARCADEPI", "PeerPong/res/fonts/ARCADEPI.TTF"};
+Font dimis = {"DISMIS", "res/fonts/DIMIS___.TTF"};
+Font arcadepi = {"ARCADEPI", "res/fonts/ARCADEPI.TTF"};
 Paddle* paddle = NULL;
 Ball* ball = NULL;
 
@@ -49,7 +49,7 @@ int main(int argc, const char * argv[])
         SDL_Event e;
         
         paddle = newPaddle(30, 50, 15, 80, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
-        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "PeerPong/res/img/ball_10.png"));
+        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "res/img/ball_10.png"));
         
         Timer* FPSTimer = newTimer();
         startTimer(FPSTimer);
