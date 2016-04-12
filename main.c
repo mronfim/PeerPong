@@ -68,7 +68,7 @@ int main(int argc, const char * argv[])
             // update
             while (accumulator >= SCREEN_TICKS_PER_FRAME)
             {
-                // update(SCREEN_TICKS_PER_FRAME);
+                update(SCREEN_TICKS_PER_FRAME / 1000.0);
                 accumulator -= SCREEN_TICKS_PER_FRAME;
                 ticks++;
             }
@@ -104,28 +104,15 @@ void handleInput(SDL_Event e)
     {
         if (e.type == SDL_QUIT)
             quit = 1;
-        else if (e.type == SDL_KEYDOWN)
-        {
-            switch (e.key.keysym.sym)
-            {
-                case SDLK_UP:
-                    printf("UP\n");
-                    break;
-                case SDLK_DOWN:
-                    printf("DOWN\n");
-                    break;
-                case SDLK_RETURN:
-                    printf("ENTER\n");
-                    break;
-            }
-        }
     }
+    
+    paddleInput(paddle, e);
 }
 
 
 void update(double dt)
 {
-    
+    updatePaddle(paddle, dt);
 }
 
 

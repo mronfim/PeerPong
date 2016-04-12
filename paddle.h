@@ -25,6 +25,7 @@ typedef struct Paddle {
 
 Paddle* newPaddle(int x, int y, int w, int h, SDL_Color baseColor, SDL_Color borderColor);
 void destroyPaddle(Paddle** paddle);
+void paddleInput(Paddle* paddle, SDL_Event e);
 void updatePaddle(Paddle* paddle, float dt);
 void renderPaddle(Window* window, Paddle* paddle);
 

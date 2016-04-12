@@ -8,6 +8,8 @@
 
 #include "paddle.h"
 
+#define PADDLE_SPEED 250
+
 Paddle* newPaddle(int x, int y, int w, int h, SDL_Color baseColor, SDL_Color borderColor)
 {
     Paddle* paddle = (Paddle *)malloc(sizeof(Paddle));
@@ -32,9 +34,39 @@ void destroyPaddle(Paddle** paddle)
     free(*paddle);
 }
 
+void paddleInput(Paddle* paddle, SDL_Event e)
+{
+    if (e.type == SDL_KEYDOWN)
+    {
+        switch (e.key.keysym.sym)
+        {
+            case SDLK_UP:
+                paddle->vel->y = -PADDLE_SPEED;
+                break;
+            case SDLK_DOWN:
+                paddle->vel->y = PADDLE_SPEED;
+                break;
+        }
+    }
+    
+    else if (e.type == SDL_KEYUP)
+    {
+        switch (e.key.keysym.sym)
+        {
+            case SDLK_UP:
+                paddle->vel->y = 0;
+                break;
+            case SDLK_DOWN:
+                paddle->vel->y = 0;
+                break;
+        }
+    }
+}
+
 void updatePaddle(Paddle* paddle, float dt)
 {
-    // TODO: Add movement and collision detection
+    paddle->pos->y += paddle->vel->y * dt;
+    paddle->collider.y = paddle->pos->y;
 }
 
 void renderPaddle(Window* window, Paddle* paddle)
