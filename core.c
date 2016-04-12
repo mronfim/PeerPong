@@ -177,7 +177,7 @@ void drawTexture(Window* window, Texture* t, int x, int y)
 
 void deleteTexture(Texture** texture)
 {
-    free((*texture)->texture);
+    SDL_DestroyTexture((*texture)->texture);
     free((*texture)->rect);
     free(*texture);
 }
