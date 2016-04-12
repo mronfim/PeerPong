@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "core.h"
 #include "paddle.h"
+#include "ball.h"
 #include "timer.h"
 
 
@@ -22,8 +23,8 @@ const int SCREEN_TICKS_PER_FRAME = 1000.0 / SCREEN_FPS;
 Window* window = NULL;
 Font dimis = {"DISMIS", "PeerPong/res/fonts/DIMIS___.TTF"};
 Font arcadepi = {"ARCADEPI", "PeerPong/res/fonts/ARCADEPI.TTF"};
-Texture* ball = NULL;
 Paddle* paddle = NULL;
+Ball* ball = NULL;
 
 int quit = 0;
 
@@ -46,8 +47,8 @@ int main(int argc, const char * argv[])
     {
         SDL_Event e;
         
-        ball = loadTexture(window, "PeerPong/res/img/ball_15.png");
-        paddle = newPaddle(30, 50, 20, 80, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
+        paddle = newPaddle(30, 50, 15, 80, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
+        ball = newBall(200, 200, 5, loadTexture(window, "PeerPong/res/img/ball_10.png"));
         
         Timer* FPSTimer = newTimer();
         startTimer(FPSTimer);
@@ -88,8 +89,8 @@ int main(int argc, const char * argv[])
         
         destroyTimer(&FPSTimer);
         destroyPaddle(&paddle);
+        destroyBall(&ball);
         freeWindow(&window);
-        deleteTexture(&ball);
     }
     
     quitSDL();
@@ -120,6 +121,6 @@ void render()
 {
     clearScreen(window, getColor(0, 0, 0, 255));
     renderPaddle(window, paddle);
-    drawTexture(window, ball, 300, 300);
+    renderBall(window, ball);
     SDL_RenderPresent(window->renderer);
 }
