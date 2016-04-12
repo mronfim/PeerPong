@@ -33,9 +33,13 @@ void updateBall(Ball* ball, Paddle* paddle, float dt)
     ball->pos->x += ball->vel->x * dt;
     ball->pos->y += ball->vel->y * dt;
     
+    printf("Paddle x: %d, Paddle y: %d\n", paddle->collider.x, paddle->collider.y);
+    
     if (checkCollision(ball, paddle->collider))
     {
+        ball->pos->x -= ball->vel->x * dt;
         ball->vel->x *= -1.5;
+        ball->pos->x += ball->vel->x * dt;
     }
 }
 
@@ -68,11 +72,13 @@ int checkCollision(Ball* ball, SDL_Rect rect)
     // if the closest point is inside the circle
     int deltaX = cX - (int)ball->pos->x;
     int deltaY = cY - (int)ball->pos->y;
-    double distanceSquared = deltaX*deltaX + deltaY+deltaY;
+    double distanceSquared = deltaX*deltaX + deltaY*deltaY;
     
     if (distanceSquared < (ball->r * ball->r))
-        // this box and the circle have collided
+    {
+        printf("Collided\n");
         return 1;
+    }
     
     return 0;
 }
