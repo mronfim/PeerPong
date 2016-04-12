@@ -14,9 +14,10 @@
 
 
 // CONSTANTS
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
 const int SCREEN_FPS = 30;
 const int SCREEN_TICKS_PER_FRAME = 1000.0 / SCREEN_FPS;
-
 
 
 // VARIABLES
@@ -43,12 +44,12 @@ int main(int argc, const char * argv[])
     if (!initSDL())
         return 1;
     
-    if ((window = newWindow("PeerPong", 640, 480)) != NULL)
+    if ((window = newWindow("PeerPong", WINDOW_WIDTH, WINDOW_HEIGHT)) != NULL)
     {
         SDL_Event e;
         
         paddle = newPaddle(30, 50, 15, 80, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
-        ball = newBall(200, 200, 5, loadTexture(window, "PeerPong/res/img/ball_10.png"));
+        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "PeerPong/res/img/ball_10.png"));
         
         Timer* FPSTimer = newTimer();
         startTimer(FPSTimer);
@@ -114,6 +115,7 @@ void handleInput(SDL_Event e)
 void update(double dt)
 {
     updatePaddle(paddle, dt);
+    updateBall(ball, paddle, dt);
 }
 
 
