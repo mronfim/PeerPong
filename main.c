@@ -25,6 +25,7 @@ Window* window = NULL;
 Font dimis = {"DISMIS", "res/fonts/DIMIS___.TTF"};
 Font arcadepi = {"ARCADEPI", "res/fonts/ARCADEPI.TTF"};
 Paddle* paddle = NULL;
+Paddle* paddle2 = NULL;
 Ball* ball = NULL;
 
 int quit = 0;
@@ -48,8 +49,10 @@ int main(int argc, const char * argv[])
     {
         SDL_Event e;
         
-        paddle = newPaddle(30, 50, 15, 80, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
+        paddle = newPaddle(30, 50, 25, 100, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
+        paddle2 = newPaddle(700, 0, 25, 600, getColor(0, 0, 155, 255), getColor(0, 0, 255, 255));
         ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "res/img/ball_10.png"));
+        ball->vel->y = -50;
         
         Timer* FPSTimer = newTimer();
         startTimer(FPSTimer);
@@ -81,15 +84,16 @@ int main(int argc, const char * argv[])
             
             
             // print fps and ticks per second
-            if (fpsTime >= 1000)
-            {
-                printf("FPS: %d, TICKS: %d\n", fps, ticks);
-                fpsTime = fps = ticks = 0;
-            }
+            // if (fpsTime >= 1000)
+            // {
+            //     printf("FPS: %d, TICKS: %d\n", fps, ticks);
+            //     fpsTime = fps = ticks = 0;
+            // }
         }
         
         destroyTimer(&FPSTimer);
         destroyPaddle(&paddle);
+        destroyPaddle(&paddle2);
         destroyBall(&ball);
         freeWindow(&window);
     }
@@ -115,7 +119,7 @@ void handleInput(SDL_Event e)
 void update(double dt)
 {
     updatePaddle(paddle, dt);
-    updateBall(ball, paddle, dt);
+    updateBall(ball, paddle, paddle2, dt);
 }
 
 
@@ -123,6 +127,7 @@ void render()
 {
     clearScreen(window, getColor(0, 0, 0, 255));
     renderPaddle(window, paddle);
+    renderPaddle(window, paddle2);
     renderBall(window, ball);
     SDL_RenderPresent(window->renderer);
 }

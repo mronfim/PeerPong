@@ -9,6 +9,7 @@
 #include "ball.h"
 
 #define MIN_BALL_SPEED 200
+#define MAX_BALL_SPEED 400
 
 Ball* newBall(int x, int y, int r, Texture* texture)
 {
@@ -28,19 +29,92 @@ void destroyBall(Ball** ball)
     free(*ball);
 }
 
-void updateBall(Ball* ball, Paddle* paddle, float dt)
+Vector2f* getNewVel(Ball* ball, SDL_Rect rect)
+{
+    // new velocity vector to be returned.
+    Vector2f* newVel = vec2f_new( ball->vel->x * -1.6, 0 );
+
+    // distance from the middle of the paddle
+    // to the ball, vertically.
+    float distance = ball->pos->y - (rect.y + rect.h / 2);
+
+    // if distance is negative, ball hit top half
+    if (distance < 0)
+    {
+        // make the ball move towards the top of the screen
+        newVel->y = MAX_BALL_SPEED * (distance / (rect.h / 2));
+    }
+
+    // else if distance is positive, ball hit bottom half
+    else if (distance > 0)
+    {
+        // make the ball move towards the bottom of the screen
+        newVel->y = MAX_BALL_SPEED * (distance / (rect.h / 2));
+    }
+
+    // otherwise, the ball hit right in the center of the paddle
+    else
+    {
+        // make the ball move horizontally
+        newVel->y = 0;
+    }
+
+    return newVel;
+}
+
+void updateBall(Ball* ball, Paddle* paddle, Paddle* paddle2, float dt)
 {
     ball->pos->x += ball->vel->x * dt;
     ball->pos->y += ball->vel->y * dt;
     
-    printf("Paddle x: %d, Paddle y: %d\n", paddle->collider.x, paddle->collider.y);
-    
+    // if ball hits left paddle
     if (checkCollision(ball, paddle->collider))
     {
         ball->pos->x -= ball->vel->x * dt;
-        ball->vel->x *= -1.5;
-        ball->pos->x += ball->vel->x * dt;
+        Vector2f* newVal = getNewVel(ball, paddle->collider);
+        free(ball->vel);
+        ball->vel = newVal;
     }
+
+    // if ball hits right paddle
+    if (checkCollision(ball, paddle2->collider))
+    {
+        ball->pos->x -= ball->vel->x * dt;
+        Vector2f* newVal = getNewVel(ball, paddle2->collider);
+        free(ball->vel);
+        ball->vel = newVal;
+    }
+
+    // check if ball hits top or bottom
+    if (ball->pos->y - ball->r < 0)
+    {
+        ball->pos->y = ball->r;
+        ball->vel->y *= -1.5;
+    }
+    else if (ball->pos->y + ball->r > 600)
+    {
+        ball->pos->y = 600 - ball->r;
+        ball->vel->y *= -1.5;
+    }
+
+    // check if ball goes off the screen left or right
+    if (ball->pos->x + ball->r < 0 || ball->pos->x - ball->r > 800)
+    {
+        ball->pos->x = 400;
+        ball->pos->y = 300;
+        ball->vel->x = -200;
+        ball->vel->y = 0;
+    }
+
+    if (ball->vel->x > MAX_BALL_SPEED)
+            ball->vel->x = MAX_BALL_SPEED;
+        else if (ball->vel->x < -MAX_BALL_SPEED)
+            ball->vel->x = -MAX_BALL_SPEED;
+
+        if (ball->vel->y > MAX_BALL_SPEED)
+            ball->vel->y = MAX_BALL_SPEED;
+        else if (ball->vel->y < -MAX_BALL_SPEED)
+            ball->vel->y = -MAX_BALL_SPEED;
 }
 
 void renderBall(Window* window, Ball* ball)
