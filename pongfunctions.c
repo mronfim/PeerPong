@@ -167,10 +167,30 @@ void updateBall(Ball* ball, Paddle* paddle, Paddle* paddle2, float dt)
             ball->vel->y = MAX_BALL_SPEED;
         else if (ball->vel->y < -MAX_BALL_SPEED)
             ball->vel->y = -MAX_BALL_SPEED;
+
+
+    free(ball->trail[8]);
+
+    int i;
+    for (i = 8; i > 0; i--)
+    {
+        ball->trail[i] = ball->trail[i-1];
+    }
+    ball->trail[0] = vec2f_new( ball->pos->x, ball->pos->y );
 }
 
 void renderBall(Window* window, Ball* ball)
 {
+    int width = ball->r;
+
+    int i;
+    for (i = 1; i < 4; i += 1)
+    {
+        int size = width * (1.0 / i);
+        SDL_Rect r = { ball->trail[i]->x - size/2, ball->trail[i]->y - size/2, size, size };
+        fillSDLRect(window, r, getColor(150, 150, 150, 255));
+    }
+
     drawTexture(window, ball->texture, ball->pos->x - ball->r, ball->pos->y - ball->r);
 }
 

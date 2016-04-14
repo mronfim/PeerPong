@@ -55,7 +55,7 @@ int main(int argc, const char * argv[])
         
         paddle = newPaddle(30, 250, 25, 100, getColor(0, 0, 120, 255), getColor(0, 0, 255, 255));
         paddle2 = newPaddle(745, 250, 25, 100, getColor(120, 0, 0, 255), getColor(255, 0, 0, 255));
-        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 10, loadTexture(window, "res/img/ball.png"));
+        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "res/img/ball_10.png"));
         ball->vel->y = -50;
 
         divider.x = 399;

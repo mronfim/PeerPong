@@ -41,6 +41,11 @@ Ball* newBall(int x, int y, int r, Texture* texture)
     ball->vel = vec2f_new( -MIN_BALL_SPEED, 0 );
     ball->r = r;
     ball->texture = texture;
+
+    int i;
+    for (i = 0; i < 9; i++)
+        ball->trail[i] = vec2f_new(ball->pos->x, ball->pos->y);
+
     return ball;
 }
 

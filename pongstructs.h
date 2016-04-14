@@ -33,6 +33,7 @@ typedef struct Ball {
     Vector2f* vel;
     int r;
     Texture* texture;
+    Vector2f* trail[9];
 } Ball;
 
 Ball* newBall(int x, int y, int r, Texture* texture);
