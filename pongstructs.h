@@ -18,6 +18,7 @@ typedef struct Paddle {
     SDL_Color baseColor;
     SDL_Color borderColor;
     SDL_Rect collider;
+    int score;
 } Paddle;
 
 Paddle* newPaddle(int x, int y, int w, int h, SDL_Color baseColor, SDL_Color borderColor);

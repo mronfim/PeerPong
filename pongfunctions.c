@@ -147,6 +147,11 @@ void updateBall(Ball* ball, Paddle* paddle, Paddle* paddle2, float dt)
     // check if ball goes off the screen left or right
     if (ball->pos->x + ball->r < 0 || ball->pos->x - ball->r > 800)
     {
+        if (ball->pos->x + ball->r < 0)
+            paddle2->score++;
+        else if (ball->pos->x + ball->r > 800)
+            paddle->score++;
+
         ball->pos->x = 400;
         ball->pos->y = 300;
         ball->vel->x = -200;

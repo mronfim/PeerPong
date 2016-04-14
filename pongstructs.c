@@ -16,6 +16,7 @@ Paddle* newPaddle(int x, int y, int w, int h, SDL_Color baseColor, SDL_Color bor
     paddle->collider.y = y;
     paddle->collider.w = w;
     paddle->collider.h = h;
+    paddle->score = 0;
     return paddle;
     
 }

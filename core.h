@@ -61,5 +61,7 @@ void deleteTexture(Texture** texture);
 int getFontWidth(Font font, char* string, int size);
 int getFontHeight(Font font, char* string, int size);
 
+void writeNumberToScreen(Window* window, int num, int x, int y, int size, Font font, SDL_Color c);
+
 
 #endif /* core_h */

@@ -208,6 +208,16 @@ void render()
         renderPaddle(window, paddle);
         renderPaddle(window, paddle2);
         renderBall(window, ball);
+
+        char score1buff[24];
+        sprintf(score1buff, "%d", paddle->score);
+        int width1 = getFontWidth(arcadepi, score1buff, 40);
+        writeToScreen(window, score1buff, 370 - width1, 30, 40, &arcadepi, getColor(0, 0, 255, 0));
+
+        char score2buff[24];
+        sprintf(score2buff, "%d", paddle2->score);
+        int width2 = getFontWidth(arcadepi, score2buff, 40);
+        writeToScreen(window, score2buff, 430, 30, 40, &arcadepi, getColor(255, 0, 0, 0));
     }
     SDL_RenderPresent(window->renderer);
 }

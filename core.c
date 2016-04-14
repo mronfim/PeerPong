@@ -202,6 +202,7 @@ int getFontWidth(Font font, char* string, int size)
     int width = surface->w;
 
     SDL_FreeSurface(surface);
+    TTF_CloseFont(f);
 
     return width;
 }
@@ -225,6 +226,15 @@ int getFontHeight(Font font, char* string, int size)
     int height = surface->h;
 
     SDL_FreeSurface(surface);
+    TTF_CloseFont(f);
 
     return height;
+}
+
+void writeNumberToScreen(Window* window, int num, int x, int y, int size, Font font, SDL_Color c)
+{
+    char str[5];
+    snprintf(str, 5, "%d", num);
+
+    writeToScreen(window, str, x, y, size, &font, c);
 }
