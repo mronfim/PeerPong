@@ -27,7 +27,5 @@ void destroyBall(Ball** ball);
 void updateBall(Ball* ball, Paddle* paddle, Paddle* paddle2, float dt);
 void renderBall(Window* window, Ball* ball);
 int checkCollision(Ball* ball, SDL_Rect rect);
-int horizDist(Ball* ball, SDL_Rect rect);
-int vertDist(Ball* ball, SDL_Rect rect);
 
 #endif /* ball_h */

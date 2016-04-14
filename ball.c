@@ -156,13 +156,3 @@ int checkCollision(Ball* ball, SDL_Rect rect)
     
     return 0;
 }
-
-int horizDist(Ball* ball, SDL_Rect rect)
-{
-    return 0;
-}
-
-int vertDist(Ball* ball, SDL_Rect rect)
-{
-    return 0;
-}
