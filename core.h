@@ -58,5 +58,8 @@ void drawTexture(Window* window, Texture* t, int x, int y);
 Texture* loadTexture(Window* window, char* path);
 void deleteTexture(Texture** texture);
 
+int getFontWidth(Font font, char* string, int size);
+int getFontHeight(Font font, char* string, int size);
+
 
 #endif /* core_h */

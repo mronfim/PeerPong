@@ -52,9 +52,9 @@ int main(int argc, const char * argv[])
     {
         SDL_Event e;
         
-        paddle = newPaddle(30, 50, 25, 100, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
-        paddle2 = newPaddle(700, 0, 25, 600, getColor(0, 0, 155, 255), getColor(0, 0, 255, 255));
-        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "res/img/ball_10.png"));
+        paddle = newPaddle(30, 250, 25, 100, getColor(0, 0, 155, 255), getColor(0, 0, 255, 255));
+        paddle2 = newPaddle(700, 0, 25, 600, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
+        ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 10, loadTexture(window, "res/img/ball.png"));
         ball->vel->y = -50;
         
         Timer* FPSTimer = newTimer();
@@ -62,15 +62,24 @@ int main(int argc, const char * argv[])
 
 
         // main menu setup
-        Title t = { 100, 50, "PeerPong", getColor(255, 255, 255, 255), 130, dimis };
-        MenuItem item1 = { 325, 250, "START", arcadepi, 40, getColor(255,255,255,255), getColor(255,255,0,255), 1 };
-        MenuItem item2 = { 325, 300, "QUIT", arcadepi, 40, getColor(255,255,255,255), getColor(255,255,0,255), 0 };
+        Title t = { 0, 100, "PeerPong", getColor(255, 255, 255, 255), 130, dimis };
+        t.x = WINDOW_WIDTH/2 - getFontWidth(t.font, t.text, t.fontSize)/2;
+
+        MenuItem item1 = { 325, 300, "SINGLE PLAYER", arcadepi, 40, getColor(255,255,255,255), getColor(255,0,0,255), 1 };
+        item1.x = WINDOW_WIDTH/2 - getFontWidth(item1.font, item1.text, item1.fontSize)/2;
+
+        MenuItem item2 = { 325, 350, "MULTIPLAYER", arcadepi, 40, getColor(255,255,255,255), getColor(255,0,0,255), 0 };
+        item2.x = WINDOW_WIDTH/2 - getFontWidth(item2.font, item2.text, item2.fontSize)/2;
+
+        MenuItem item3 = { 325, 400, "QUIT", arcadepi, 40, getColor(255,255,255,255), getColor(255,0,0,255), 0 };
+        item3.x = WINDOW_WIDTH/2 - getFontWidth(item3.font, item3.text, item3.fontSize)/2;
 
         main_menu = newMenu();
         main_menu->title = t;
         main_menu->options[0] = item1;
         main_menu->options[1] = item2;
-        main_menu->num_options = 2;
+        main_menu->options[2] = item3;
+        main_menu->num_options = 3;
         main_menu->selected = 0;
         main_menu->active = 1;
 
@@ -141,7 +150,7 @@ void handleInput(SDL_Event e)
                 else if (e.key.keysym.sym == SDLK_RETURN)
                 {
                     char* options = menu_get_selected(main_menu);
-                    if (strcmp( options, "START" ) == 0)
+                    if (strcmp( options, "SINGLE PLAYER" ) == 0)
                     {
                         main_menu->active = 0;
                     }

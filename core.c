@@ -183,38 +183,48 @@ void deleteTexture(Texture** texture)
 }
 
 
+int getFontWidth(Font font, char* string, int size)
+{
+    TTF_Font* f = TTF_OpenFont(font.path, size);
+    if (f == NULL)
+    {
+        printf("Could not load font. TTF_Error: %s\n", TTF_GetError());
+        return 0;
+    }
 
+    SDL_Surface* surface = TTF_RenderText_Solid(f, string, getColor(255, 255, 255, 255));
+    if (surface == NULL)
+    {
+        printf("Could not creature string surface");
+        return 0;
+    }
 
+    int width = surface->w;
 
+    SDL_FreeSurface(surface);
 
+    return width;
+}
 
+int getFontHeight(Font font, char* string, int size)
+{
+    TTF_Font* f = TTF_OpenFont(font.path, size);
+    if (f == NULL)
+    {
+        printf("Could not load font. TTF_Error: %s\n", TTF_GetError());
+        return 0;
+    }
 
+    SDL_Surface* surface = TTF_RenderText_Solid(f, string, getColor(255, 255, 255, 255));
+    if (surface == NULL)
+    {
+        printf("Could not creature string surface");
+        return 0;
+    }
 
+    int height = surface->h;
 
+    SDL_FreeSurface(surface);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return height;
+}
