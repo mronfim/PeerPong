@@ -28,6 +28,7 @@ Font arcadepi = {"ARCADEPI", "res/fonts/ARCADEPI.TTF"};
 Paddle* paddle = NULL;
 Paddle* paddle2 = NULL;
 Ball* ball = NULL;
+SDL_Rect divider;
 
 int quit = 0;
 
@@ -56,6 +57,11 @@ int main(int argc, const char * argv[])
         paddle2 = newPaddle(745, 250, 25, 100, getColor(120, 0, 0, 255), getColor(255, 0, 0, 255));
         ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 10, loadTexture(window, "res/img/ball.png"));
         ball->vel->y = -50;
+
+        divider.x = 399;
+        divider.y = 0;
+        divider.w = 2;
+        divider.h = 600;
         
         Timer* FPSTimer = newTimer();
         startTimer(FPSTimer);
@@ -198,6 +204,7 @@ void render()
     }
     else
     {
+        fillSDLRect(window, divider, getColor(255,255,255,255));
         renderPaddle(window, paddle);
         renderPaddle(window, paddle2);
         renderBall(window, ball);

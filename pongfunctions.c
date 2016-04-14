@@ -3,7 +3,7 @@
 
 
 #define PADDLE_SPEED 250
-#define PADDLE_AI_SPEED 350
+#define PADDLE_AI_SPEED 320
 #define MIN_BALL_SPEED 200
 #define MAX_BALL_SPEED 400
 
