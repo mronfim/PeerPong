@@ -150,7 +150,6 @@ int checkCollision(Ball* ball, SDL_Rect rect)
     
     if (distanceSquared < (ball->r * ball->r))
     {
-        printf("Collided\n");
         return 1;
     }
     

@@ -11,6 +11,7 @@
 #include "paddle.h"
 #include "ball.h"
 #include "timer.h"
+#include "menu.h"
 
 
 // CONSTANTS
@@ -30,6 +31,8 @@ Ball* ball = NULL;
 
 int quit = 0;
 
+
+Menu* main_menu;
 
 
 // FUNCTION HEADERS
@@ -56,6 +59,21 @@ int main(int argc, const char * argv[])
         
         Timer* FPSTimer = newTimer();
         startTimer(FPSTimer);
+
+
+        // main menu setup
+        Title t = { 100, 50, "PeerPong", getColor(255, 255, 255, 255), 130, dimis };
+        MenuItem item1 = { 325, 250, "START", arcadepi, 40, getColor(255,255,255,255), getColor(255,255,0,255), 1 };
+        MenuItem item2 = { 325, 300, "QUIT", arcadepi, 40, getColor(255,255,255,255), getColor(255,255,0,255), 0 };
+
+        main_menu = newMenu();
+        main_menu->title = t;
+        main_menu->options[0] = item1;
+        main_menu->options[1] = item2;
+        main_menu->num_options = 2;
+        main_menu->selected = 0;
+        main_menu->active = 1;
+
         
         double accumulator = 0.0;
         double fpsTime = 0;
@@ -91,6 +109,7 @@ int main(int argc, const char * argv[])
             // }
         }
         
+        destroyMenu(&main_menu);
         destroyTimer(&FPSTimer);
         destroyPaddle(&paddle);
         destroyPaddle(&paddle2);
@@ -110,24 +129,68 @@ void handleInput(SDL_Event e)
     {
         if (e.type == SDL_QUIT)
             quit = 1;
+
+        else if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+        {
+            if (main_menu->active)
+            {
+                if (e.key.keysym.sym == SDLK_UP)
+                    menu_move_selector(main_menu, -1);
+                else if (e.key.keysym.sym == SDLK_DOWN)
+                    menu_move_selector(main_menu,  1);
+                else if (e.key.keysym.sym == SDLK_RETURN)
+                {
+                    char* options = menu_get_selected(main_menu);
+                    if (strcmp( options, "START" ) == 0)
+                    {
+                        main_menu->active = 0;
+                    }
+                    else if (strcmp( options, "QUIT" ) == 0)
+                    {
+                        quit = 1;
+                    }
+                }
+            }
+            else
+            {
+                if (e.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    main_menu->active = 1;
+                }
+            }
+        }
     }
     
-    paddleInput(paddle, e);
+    if (!main_menu->active)
+    {
+        paddleInput(paddle, e);
+    }   
 }
 
 
 void update(double dt)
 {
-    updatePaddle(paddle, dt);
-    updateBall(ball, paddle, paddle2, dt);
+    if (!main_menu->active)
+    {
+        updatePaddle(paddle, dt);
+        updateBall(ball, paddle, paddle2, dt);
+    }
 }
 
 
 void render()
 {
     clearScreen(window, getColor(0, 0, 0, 255));
-    renderPaddle(window, paddle);
-    renderPaddle(window, paddle2);
-    renderBall(window, ball);
+
+    if (main_menu->active)
+    {
+        menu_draw(window, main_menu);
+    }
+    else
+    {
+        renderPaddle(window, paddle);
+        renderPaddle(window, paddle2);
+        renderBall(window, ball);
+    }
     SDL_RenderPresent(window->renderer);
 }
