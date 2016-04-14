@@ -8,8 +8,8 @@
 
 #include <stdio.h>
 #include "core.h"
-#include "paddle.h"
-#include "ball.h"
+#include "pongstructs.h"
+#include "pongfunctions.h"
 #include "timer.h"
 #include "menu.h"
 
@@ -52,8 +52,8 @@ int main(int argc, const char * argv[])
     {
         SDL_Event e;
         
-        paddle = newPaddle(30, 250, 25, 100, getColor(0, 0, 155, 255), getColor(0, 0, 255, 255));
-        paddle2 = newPaddle(700, 0, 25, 600, getColor(155, 0, 0, 255), getColor(255, 0, 0, 255));
+        paddle = newPaddle(30, 250, 25, 100, getColor(0, 0, 120, 255), getColor(0, 0, 255, 255));
+        paddle2 = newPaddle(745, 250, 25, 100, getColor(120, 0, 0, 255), getColor(255, 0, 0, 255));
         ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 10, loadTexture(window, "res/img/ball.png"));
         ball->vel->y = -50;
         
@@ -182,6 +182,7 @@ void update(double dt)
     if (!main_menu->active)
     {
         updatePaddle(paddle, dt);
+        updateAI(paddle2, ball, dt);
         updateBall(ball, paddle, paddle2, dt);
     }
 }

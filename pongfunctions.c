@@ -1,33 +1,80 @@
-//
-//  ball.c
-//  PeerPong
-//
-//  Created by Matheus Barella Ronfim on 4/11/16.
-//  Copyright © 2016 Matheus Barella Ronfim. All rights reserved.
-//
 
-#include "ball.h"
+#include "pongfunctions.h"
 
+
+#define PADDLE_SPEED 250
+#define PADDLE_AI_SPEED 350
 #define MIN_BALL_SPEED 200
 #define MAX_BALL_SPEED 400
 
-Ball* newBall(int x, int y, int r, Texture* texture)
+
+void paddleInput(Paddle* paddle, SDL_Event e)
 {
-    Ball* ball = (Ball *) malloc(sizeof(Ball));
-    ball->pos = vec2f_new( (float)x, (float)y );
-    ball->vel = vec2f_new( -MIN_BALL_SPEED, 0 );
-    ball->r = r;
-    ball->texture = texture;
-    return ball;
+    if (e.type == SDL_KEYDOWN)
+    {
+        switch (e.key.keysym.sym)
+        {
+            case SDLK_UP:
+                paddle->vel->y = -PADDLE_SPEED;
+                break;
+            case SDLK_DOWN:
+                paddle->vel->y = PADDLE_SPEED;
+                break;
+        }
+    }
+    
+    else if (e.type == SDL_KEYUP)
+    {
+        switch (e.key.keysym.sym)
+        {
+            case SDLK_UP:
+                paddle->vel->y = 0;
+                break;
+            case SDLK_DOWN:
+                paddle->vel->y = 0;
+                break;
+        }
+    }
 }
 
-void destroyBall(Ball** ball)
+void updatePaddle(Paddle* paddle, float dt)
 {
-    free((*ball)->pos);
-    free((*ball)->vel);
-    deleteTexture(&(*ball)->texture);
-    free(*ball);
+    paddle->pos->y += paddle->vel->y * dt;
+    paddle->collider.y = paddle->pos->y;
 }
+
+void renderPaddle(Window* window, Paddle* paddle)
+{
+    fillSDLRect(window, paddle->collider, paddle->baseColor);
+    drawSDLRect(window, paddle->collider, paddle->borderColor);
+}
+
+void updateAI(Paddle* paddle, struct Ball* ball, float dt)
+{
+    // distance from ball to the center of the paddle, in y axis
+    int distance = (int)(ball->pos->y) - (int)(paddle->pos->y + paddle->h/2);
+
+    // if distance is negative, move up
+    if (distance < 0)
+        paddle->vel->y = -PADDLE_AI_SPEED;
+    // if distance is positive, move down
+    else if (distance > 0)
+        paddle->vel->y = PADDLE_AI_SPEED;
+    // if distance is zero, stop moving
+    else
+        paddle->vel->y = 0.f;
+
+    // update position
+    paddle->pos->y += paddle->vel->y * dt;
+
+    if ( paddle->pos->y + paddle->h/2 > ball->pos->y && paddle->vel->y > 0 )
+        paddle->pos->y = ball->pos->y - paddle->h/2;
+    else if ( paddle->pos->y + paddle->h/2 < ball->pos->y && paddle->vel->y < 0 )
+        paddle->pos->y = ball->pos->y - paddle->h/2;
+
+    paddle->collider.y = paddle->pos->y;
+}
+
 
 Vector2f* getNewVel(Ball* ball, SDL_Rect rect)
 {
