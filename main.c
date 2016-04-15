@@ -34,12 +34,14 @@ int quit = 0;
 
 
 Menu* main_menu;
+Menu* paused_menu;
 
 
 // FUNCTION HEADERS
 void handleInput(SDL_Event e);
 void update(double dt);
 void render();
+void reset();
 
 
 
@@ -88,6 +90,30 @@ int main(int argc, const char * argv[])
         main_menu->num_options = 3;
         main_menu->selected = 0;
         main_menu->active = 1;
+
+
+        // pause menu setup
+        Title title = { 0, 150, "GAME PAUSED", getColor(255, 255, 255, 255), 60, arcadepi };
+        title.x = WINDOW_WIDTH/2 - getFontWidth(title.font, title.text, title.fontSize)/2;
+
+        MenuItem resume = { 0, 300, "RESUME", arcadepi, 30, getColor(255, 255, 255, 255), getColor(255, 0, 0, 255), 1 };
+        resume.x = WINDOW_WIDTH/2 - getFontWidth(resume.font, resume.text, resume.fontSize)/2;
+
+        MenuItem back = { 0, 350, "MAIN MENU", arcadepi, 30, getColor(255, 255, 255, 255), getColor(255, 0, 0, 255), 0 };
+        back.x = WINDOW_WIDTH/2 - getFontWidth(back.font, back.text, back.fontSize)/2;
+
+        MenuItem paused_quit = { 0, 400, "QUIT", arcadepi, 30, getColor(255, 255, 255, 255), getColor(255, 0, 0, 255), 0 };
+        paused_quit.x = WINDOW_WIDTH/2 - getFontWidth(paused_quit.font, paused_quit.text, paused_quit.fontSize)/2;
+
+        paused_menu = newMenu();
+        paused_menu->title = title;
+        paused_menu->options[0] = resume;
+        paused_menu->options[1] = back;
+        paused_menu->options[2] = paused_quit;
+        paused_menu->num_options = 3;
+        paused_menu->selected = 0;
+        paused_menu->active = 0;
+
 
         
         double accumulator = 0.0;
@@ -166,11 +192,40 @@ void handleInput(SDL_Event e)
                     }
                 }
             }
+            else if (paused_menu->active)
+            {
+                if (e.key.keysym.sym == SDLK_UP)
+                    menu_move_selector(paused_menu, -1);
+                else if (e.key.keysym.sym == SDLK_DOWN)
+                    menu_move_selector(paused_menu,  1);
+                else if (e.key.keysym.sym == SDLK_RETURN)
+                {
+                    char* options = menu_get_selected(paused_menu);
+                    if (strcmp( options, "RESUME" ) == 0)
+                    {
+                        paused_menu->active = 0;
+                    }
+                    else if (strcmp( options, "MAIN MENU" ) == 0)
+                    {
+                        main_menu->active = 1;
+                        paused_menu->active = 0;
+                        reset();
+                    }
+                    else if (strcmp( options, "QUIT" ) == 0)
+                    {
+                        quit = 1;
+                    }
+                }
+                else if (e.key.keysym.sym == SDLK_p)
+                {
+                    paused_menu->active = 0;
+                }
+            }
             else
             {
-                if (e.key.keysym.sym == SDLK_ESCAPE)
+                if (e.key.keysym.sym == SDLK_ESCAPE || e.key.keysym.sym == SDLK_p)
                 {
-                    main_menu->active = 1;
+                    paused_menu->active = 1;
                 }
             }
         }
@@ -185,7 +240,7 @@ void handleInput(SDL_Event e)
 
 void update(double dt)
 {
-    if (!main_menu->active)
+    if (!main_menu->active && !paused_menu->active)
     {
         updatePaddle(paddle, dt);
         updateAI(paddle2, ball, dt);
@@ -196,14 +251,19 @@ void update(double dt)
 
 void render()
 {
-    clearScreen(window, getColor(0, 0, 0, 255));
-
     if (main_menu->active)
     {
+        clearScreen(window, getColor(0, 0, 0, 255));
         menu_draw(window, main_menu);
+    }
+    else if (paused_menu->active)
+    {
+        // clearScreen(window, getColor(0, 0, 0, 155));
+        menu_draw(window, paused_menu);
     }
     else
     {
+        clearScreen(window, getColor(0, 0, 0, 255));
         fillSDLRect(window, divider, getColor(255,255,255,255));
         renderPaddle(window, paddle);
         renderPaddle(window, paddle2);
@@ -220,4 +280,18 @@ void render()
         writeToScreen(window, score2buff, 430, 30, 40, &arcadepi, getColor(255, 0, 0, 0));
     }
     SDL_RenderPresent(window->renderer);
+}
+
+
+void reset()
+{
+    paddle->pos->y = 250;
+    paddle->score = 0;
+
+    paddle2->pos->y = 250;
+    paddle2->score = 0;
+
+    destroyBall(&ball);
+    ball = newBall(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 5, loadTexture(window, "res/img/ball_10.png"));
+    ball->vel->y = -50;
 }
